@@ -39,12 +39,15 @@ public class StreamPractice {
         OptionalDouble avg = IntStream.range(0, numbers.size())
                 .mapToObj(i -> {
                     Integer val = numbers.get(i);
-                    if (i % 2 == 1 && val != null) {
+                    if (val == null) {
+                        return null; // буде відфільтровано нижче
+                    }
+                    if (i % 2 == 1) {
                         return val - 1;
                     }
                     return val;
                 })
-                .filter(Objects::nonNull)
+                .filter(Objects::nonNull) // важливо: фільтруємо null до unboxing
                 .mapToInt(Integer::intValue)
                 .filter(n -> Math.abs(n % 2) == 1)
                 .average();
@@ -63,7 +66,7 @@ public class StreamPractice {
 
         return peopleList.stream()
                 .filter(Objects::nonNull)
-                .filter(p -> p.getSex() == Person.Sex.MAN)
+                .filter(p -> Person.Sex.MAN.equals(p.getSex()))
                 .filter(p -> p.getAge() >= fromAge && p.getAge() <= toAge)
                 .collect(Collectors.toList());
     }
@@ -78,7 +81,7 @@ public class StreamPractice {
                 .filter(Objects::nonNull)
                 .filter(p -> p.getAge() >= fromAge)
                 .filter(p -> {
-                    if (p.getSex() == Person.Sex.MAN) {
+                    if (Person.Sex.MAN.equals(p.getSex())) {
                         return p.getAge() <= maleToAge;
                     } else {
                         return p.getAge() <= femaleToAge;
@@ -94,7 +97,7 @@ public class StreamPractice {
 
         return peopleList.stream()
                 .filter(Objects::nonNull)
-                .filter(p -> p.getSex() == Person.Sex.WOMAN)
+                .filter(p -> Person.Sex.WOMAN.equals(p.getSex()))
                 .filter(p -> p.getAge() >= femaleAge)
                 .flatMap(p -> {
                     List<Cat> cats = p.getCats();

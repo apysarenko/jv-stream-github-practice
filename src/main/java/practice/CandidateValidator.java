@@ -7,6 +7,9 @@ import model.Candidate;
 
 public class CandidateValidator implements Predicate<Candidate> {
 
+    private static final int MIN_AGE = 35;
+    private static final int REQUIRED_YEARS_IN_UKR = 10;
+    private static final String REQUIRED_NATIONALITY = "Ukrainian";
     private static final Pattern PERIOD_PATTERN = Pattern.compile("(\\d{4})-(\\d{4})");
 
     @Override
@@ -15,7 +18,7 @@ public class CandidateValidator implements Predicate<Candidate> {
             return false;
         }
 
-        if (candidate.getAge() < 35) {
+        if (candidate.getAge() < MIN_AGE) {
             return false;
         }
 
@@ -23,7 +26,7 @@ public class CandidateValidator implements Predicate<Candidate> {
             return false;
         }
 
-        if (!"Ukrainian".equals(candidate.getNationality())) {
+        if (!REQUIRED_NATIONALITY.equals(candidate.getNationality())) {
             return false;
         }
 
@@ -47,6 +50,6 @@ public class CandidateValidator implements Predicate<Candidate> {
             }
         }
 
-        return totalYears >= 10;
+        return totalYears >= REQUIRED_YEARS_IN_UKR;
     }
 }
